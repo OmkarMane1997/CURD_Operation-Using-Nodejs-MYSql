@@ -2,6 +2,19 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
 
+
+
+
+const Nodata =()=>{
+  return(
+    <>
+    <tr   ><td className="d-flex justify-content-center"><b>No Data Found!</b></td></tr>
+    </>
+  )
+}
+
+
+
 function Home() {
   const [data, setData] = useState([]);
 
@@ -10,7 +23,7 @@ function Home() {
     try {
       const response = await axios.get(`${URl}/read`);
       let data = response.data.result;
-      // console.log(data)
+      console.log(data.length)
       setData(data);
     } catch (error) {
       console.error(error);
@@ -21,8 +34,11 @@ function Home() {
     getData();
   }, []);
 
+
+
+
   const deleteHandler = async (id) => {
-    alert(id);
+    // alert(id);
     try {
       await axios.patch(`${URl}/delete/${id}`);
       getData();
@@ -48,7 +64,11 @@ function Home() {
             </tr>
           </thead>
           <tbody>
-            {data.map((item, index) => {
+
+            
+            {
+
+                data.length ===0 ?<Nodata/>:data.map((item, index) => {
               return (
                 <tr key={index}>
                   <th scope="row">{item.id}</th>
@@ -59,10 +79,10 @@ function Home() {
                   <td>
                     <NavLink
                       to={`/Update/${item.id}`}
-                      className="btn btn-outline-warning btn-sm"
+                      className="btn btn-outline-warning btn-sm mx-2"
                     >
                       Update
-                    </NavLink>{" "}
+                    </NavLink>
                     <button
                       onClick={() => deleteHandler(item.id)}
                       className="btn btn-outline-danger btn-sm"
@@ -72,7 +92,11 @@ function Home() {
                   </td>
                 </tr>
               );
-            })}
+            })
+              
+            
+            
+            }
           </tbody>
         </table>
       </div>
