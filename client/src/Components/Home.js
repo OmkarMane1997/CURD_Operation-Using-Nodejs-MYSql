@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { NavLink } from "react-router-dom";
+import { toast } from "react-toastify";
 
 
 
@@ -40,7 +41,9 @@ function Home() {
   const deleteHandler = async (id) => {
     // alert(id);
     try {
-      await axios.patch(`${URl}/delete/${id}`);
+     let result = await axios.patch(`${URl}/delete/${id}`);
+    //  console.log(result.data.msg)
+     toast.success(result.data.msg)
       getData();
     } catch (error) {
       console.error(error);

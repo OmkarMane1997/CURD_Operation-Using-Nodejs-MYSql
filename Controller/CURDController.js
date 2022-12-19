@@ -53,7 +53,7 @@ const CURDController = {
                               return res.status(StatusCodes.BAD_REQUEST).json({ msg: "Email id is already Exits!" });
                                 
                               }
-                              res.status(StatusCodes.OK).json({ msg: " Create SuccessFull", score ,id });  
+                              res.status(StatusCodes.CREATED).json({ msg: " Create SuccessFull", score ,id });  
                   } catch (err) {
                     return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg:err.message})
                   }                   
@@ -136,6 +136,28 @@ const CURDController = {
                         return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg:err.message})
                       }
   },
+  readSingle:async (req,res)=>{
+    try {
+        let id = req.params.id;
+        let findData = `SELECT * FROM user_master WHERE id='${id}'`;
+        // console.log(findData)
+        let exitsID = await DBconnection(findData)
+        if (exitsID.length == 0) {
+          return res.status(StatusCodes.OK).json({ msg: "Unable to Get Data, Provide id doesn't exists",id});
+        } else {
+           let findData = `SELECT id,name, email, phone, designation FROM user_master WHERE id='${id} AND is_active=1'`;
+        // console.log(findData)
+        let getData = await DBconnection(findData);
+        // console.log(getData)
+        res.status(StatusCodes.OK).json({ getData });
+        }
+       
+
+
+    } catch (err) {
+      return res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({msg:err.message})
+    }
+  }
 };
 
 module.exports = CURDController;

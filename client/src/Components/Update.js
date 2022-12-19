@@ -1,36 +1,60 @@
-import React, { useState } from "react";
-// import validator from "validator";
+import React, { useState ,useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-function Create() {
+function Update() {
+  const URl = `http://localhost:4000/api/v1/Curd`;
   const [regUser, setRegUser] = useState({
     name: "",
-    email: "",
     phone: "",
+    email:"",
     designation: "",
-    password: "",
   });
 
-  const [buttonStatus, setButtonStatus] = useState(false)
+  
 
+  const [buttonStatus, setButtonStatus] = useState(false)
+  const params = useParams(); // to read router params
+  const navigate = useNavigate();  // to navigate
   const readValue = (e) => {
     const { name, value } = e.target;
     setRegUser({ ...regUser, [name]: value });
   };
 
-  const URl = `http://localhost:4000/api/v1/Curd`;
+const getUserData=async()=>{
+  try {
+    const result = await axios.get(`${URl}/readSingle/${params.id}`);
+
+    console.log(result.data.getData[0])
+    
+    // console.log("get",result.data.getData)
+    setRegUser(result.data.getData[0])
+    // console.log('setting data',regUser)
+
+  } catch (err) {
+
+    console.log("err",err)
+  }
+
+}
+  
+  useEffect(() => {
+    getUserData()
+  }, [])
+  
 
   const submitHandler = async (e) => {
     e.preventDefault();
 
-    // console.log("Insert data:-", regUser);
+    console.log("Insert data:-", regUser);
     try {
       setButtonStatus(true)
-      const result = await axios.post(`${URl}/create`, regUser);
+      const result = await axios.patch(`${URl}/update/${params.id}`, regUser);
       //  console.log(result.data)
       toast.success(result.data.msg);
       setButtonStatus(false)
+      navigate('/')
     } catch (err) {
       toast.error(err.response.data.msg);
       setButtonStatus(false)
@@ -40,7 +64,7 @@ function Create() {
   return (
     <div className="container">
       <div className="text-center">
-        <div className="display-3">Create User</div>
+        <div className="display-3">Update User </div>
       </div>
       <div className="row">
         <div className="offset-md-3 col-md-6 my-2">
@@ -60,7 +84,9 @@ function Create() {
                     name="name"
                     className="form-control"
                     placeholder="User Name"
+                     value={regUser.name || ''}
                     onChange={readValue}
+                   
                     required
                   />
                 </div>
@@ -74,8 +100,9 @@ function Create() {
                     name="email"
                     className="form-control"
                     placeholder="User Email"
+                    value={regUser.email || ''}
                     onChange={readValue}
-                    required
+                    readOnly
                   />
                 </div>
                 <div className="input-group my-3 ">
@@ -88,6 +115,7 @@ function Create() {
                     name="phone"
                     className="form-control"
                     placeholder="User phone"
+                    value={regUser.phone || ''}
                     onChange={readValue}
                     required
                   />
@@ -102,28 +130,14 @@ function Create() {
                     name="designation"
                     className="form-control"
                     placeholder="User Designation"
+                    value={regUser.designation || ''}
                     onChange={readValue}
                     required
                   />
-                </div>
-                <div className="input-group my-3 ">
-                  <span className="input-group-text" id="basic-addon1">
-                    <i className="bi bi-key-fill"></i>
-                  </span>
-                  <input
-                    type="password"
-                    id="password"
-                    name="password"
-                    className="form-control"
-                    placeholder="User Password"
-                    onChange={readValue}
-                    required
-                  />
-                </div>
-               
+                </div> 
                 <div className="input-group my-3 d-flex justify-content-center">
                   <button disabled={buttonStatus} type="submit" className="btn btn-outline-success ">
-                    <i className="bi bi-door-open-fill mx-1"></i> Registration
+                    <i className="bi bi-door-open-fill mx-1"></i> Update
                   </button>
                 </div>
               </form>
@@ -135,4 +149,4 @@ function Create() {
   );
 }
 
-export default Create;
+export default Update;
