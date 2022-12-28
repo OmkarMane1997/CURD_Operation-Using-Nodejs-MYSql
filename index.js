@@ -19,7 +19,8 @@ app.use(cors())
 // import route
 const CurdRoute = require('./Route/CURDRoute')
 // applying
-app.use(`/api/v1/Curd`,CurdRoute)
+// app.use(`/api/v1/Curd`,CurdRoute)
+app.use(`curd-operations-mysql.cyclic.app`,CurdRoute)
 
 // Default path if Path is not found the show the error
 app.all(`*`, (req, res) => {
