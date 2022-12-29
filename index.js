@@ -23,9 +23,9 @@ const CurdRoute = require('./Route/CURDRoute')
 app.use(`curd-operations-mysql.cyclic.app`,CurdRoute)
 
 // Default path if Path is not found the show the error
-app.all(`*`, (req, res) => {
-    res.status(StatusCodes.NOT_FOUND).json({ msg: `The Request route path Not Found` })
-})
+// app.all(`*`, (req, res) => {
+//     res.status(StatusCodes.NOT_FOUND).json({ msg: `The Request route path Not Found` })
+// })
 
 const startServer = async()=>{
     try {
