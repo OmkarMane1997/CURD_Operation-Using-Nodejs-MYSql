@@ -7,6 +7,13 @@ const assert = require("assert");
 const { StatusCodes } = require("http-status-codes");
 // const path = require("path");
 
+
+
+
+// Creating the reference on Express
+const app = express();
+
+
 // #############################################################################
 // This configures static hosting for files in /public that have the extensions
 // listed in the array.
@@ -24,8 +31,7 @@ var options = {
 const PORT = process.env.PORT || 4000;
 
 
-// Creating the reference on Express
-const app = express()
+
 
 //Body Parser
 app.use(express.urlencoded({extended:true}))
