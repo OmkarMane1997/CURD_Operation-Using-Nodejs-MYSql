@@ -5,7 +5,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const assert = require("assert");
 const { StatusCodes } = require("http-status-codes");
-const path = require("path");
+// const path = require("path");
 
 // #############################################################################
 // This configures static hosting for files in /public that have the extensions
